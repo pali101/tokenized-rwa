@@ -62,21 +62,22 @@ contract RWAStableCoin is ERC20, Ownable, IERC1155Receiver {
     // Does not make sense to overcollateratize to 150%, it isn't DeFi protocol with high liquidity
     // RWA are usually much more stable
 
-    function onERC1155Received(address operator, address from, uint256 id, uint256 value, bytes calldata data)
-        external
-        pure
-        override
-        returns (bytes4)
-    {
+    function onERC1155Received(
+        address, /*operator*/
+        address, /*from*/
+        uint256, /*id*/
+        uint256, /*value*/
+        bytes calldata /*data*/
+    ) external pure override returns (bytes4) {
         return this.onERC1155Received.selector;
     }
 
     function onERC1155BatchReceived(
-        address operator,
-        address from,
-        uint256[] calldata ids,
-        uint256[] calldata values,
-        bytes calldata data
+        address, /*operator*/
+        address, /*from*/
+        uint256[] calldata, /*ids*/
+        uint256[] calldata, /*values*/
+        bytes calldata /*data*/
     ) external pure override returns (bytes4) {
         return this.onERC1155BatchReceived.selector;
     }
