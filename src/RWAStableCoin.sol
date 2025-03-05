@@ -7,7 +7,7 @@ import {IERC1155Receiver} from "@openzeppelin/contracts/token/ERC1155/IERC1155Re
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {RWAToken} from "./RWAToken.sol";
 
-contract RWAStableCoin is ERC20, Ownable, IERC1155Receiver {
+contract RWAStableCoin is ERC20, Ownable, IERC1155Receiver, ReentrancyGuard {
     RWAToken public rwaToken;
     uint256 public constant COLLATERAL_RATIO = 120;
     // uint256 public constant LIQUIDATION_THRESHOLD = 120;
@@ -43,7 +43,7 @@ contract RWAStableCoin is ERC20, Ownable, IERC1155Receiver {
         emit StablecoinMinted(msg.sender, propertyId, stableCoinAmount);
     }
 
-    function redeemStableCoin(uint256 propertyId, uint256 stableCoinAmount) external {
+    function redeemStableCoin(uint256 propertyId, uint256 stableCoinAmount) external nonReentrant {
         (, uint256 propertyValue, uint256 totalShares) = rwaToken.properties(propertyId);
         require(totalShares > 0, "invalid property");
 
