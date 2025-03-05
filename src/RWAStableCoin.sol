@@ -3,9 +3,10 @@ pragma solidity 0.8.28;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 import "./RWAToken.sol";
 
-contract RWAStableCoin is ERC20, Ownable {
+contract RWAStableCoin is ERC20, Ownable, IERC1155Receiver {
     RWAToken public rwaToken;
     uint256 public constant COLLATERAL_RATIO = 120;
     // uint256 public constant LIQUIDATION_THRESHOLD = 120;
@@ -60,4 +61,27 @@ contract RWAStableCoin is ERC20, Ownable {
 
     // Does not make sense to overcollateratize to 150%, it isn't DeFi protocol with high liquidity
     // RWA are usually much more stable
+
+    function onERC1155Received(address operator, address from, uint256 id, uint256 value, bytes calldata data)
+        external
+        pure
+        override
+        returns (bytes4)
+    {
+        return this.onERC1155Received.selector;
+    }
+
+    function onERC1155BatchReceived(
+        address operator,
+        address from,
+        uint256[] calldata ids,
+        uint256[] calldata values,
+        bytes calldata data
+    ) external pure override returns (bytes4) {
+        return this.onERC1155BatchReceived.selector;
+    }
+
+    function supportsInterface(bytes4 interfaceId) public pure override returns (bool) {
+        return interfaceId == type(IERC1155Receiver).interfaceId;
+    }
 }
